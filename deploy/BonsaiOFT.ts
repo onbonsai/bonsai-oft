@@ -1,14 +1,21 @@
 import assert from 'assert'
 
 import { type DeployFunction } from 'hardhat-deploy/types'
+import getContract from './utils/getContract'
 
-const contractName = 'MyOFT'
+const contractName = 'BonsaiOFT'
+
+const TOKENS_PER_NFT = 100_000
+
+// WITH ART
+const URI = 'ipfs://bafybeiba7hsqirohcgqibxokpml7eoh65z7fagah7ed7ggejud265ro2ky/'
 
 const deploy: DeployFunction = async (hre) => {
-    const { getNamedAccounts, deployments } = hre
+    const { getNamedAccounts, deployments, ethers } = hre
 
     const { deploy } = deployments
     const { deployer } = await getNamedAccounts()
+    const [deployerSigner] = await ethers.getSigners();
 
     assert(deployer, 'Missing named deployer account')
 
@@ -43,8 +50,7 @@ const deploy: DeployFunction = async (hre) => {
     const { address } = await deploy(contractName, {
         from: deployer,
         args: [
-            'MyOFT', // name
-            'MOFT', // symbol
+            TOKENS_PER_NFT,
             endpointV2Deployment.address, // LayerZero's EndpointV2 address
             deployer, // owner
         ],
@@ -53,6 +59,13 @@ const deploy: DeployFunction = async (hre) => {
     })
 
     console.log(`Deployed contract: ${contractName}, network: ${hre.network.name}, address: ${address}`)
+
+    // setting the base uri
+
+    const bonsai = getContract(deployerSigner, 'BonsaiOFT', address, 'artifacts/contracts')
+    const tx = await bonsai.setBaseURI(URI)
+    console.log(`setting base uri: ${tx.hash}`)
+    await tx.wait();
 }
 
 deploy.tags = [contractName]

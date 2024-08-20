@@ -25,4 +25,6 @@ remappings = [
     'forge-std/=node_modules/@layerzerolabs/toolbox-foundry/lib/forge-std',
     '@layerzerolabs/=node_modules/@layerzerolabs/',
     '@openzeppelin/=node_modules/@openzeppelin/',
+    'dn404-adjustable/=lib/dn404-adjustable/src/',
+    'solady/=lib/dn404-adjustable/lib/solady/src/',
 ]
