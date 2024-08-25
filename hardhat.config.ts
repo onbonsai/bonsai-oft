@@ -63,11 +63,10 @@ const config: HardhatUserConfig = {
             url: process.env.RPC_URL_BASE_SEPOLIA || 'https://sepolia.base.org',
             accounts,
         },
-        'zksync-testnet': {
+        'zksync-sepolia': {
             eid: EndpointId.ZKSYNC_V2_TESTNET,
             url: process.env.RPC_URL_ZKSYNC_TESTNET || 'https://sepolia.era.zksync.dev',
             accounts,
-            zksync: true
         },
         'amoy-testnet': {
             eid: EndpointId.AMOY_V2_TESTNET,

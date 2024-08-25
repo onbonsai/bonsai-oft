@@ -28,3 +28,6 @@ remappings = [
     'dn404-adjustable/=lib/dn404-adjustable/src/',
     'solady/=lib/dn404-adjustable/lib/solady/src/',
 ]
+
+[rpc_endpoints]
+zksync-sepolia="https://sepolia.era.zksync.dev"

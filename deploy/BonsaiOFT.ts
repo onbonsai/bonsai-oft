@@ -4,6 +4,7 @@ import { type DeployFunction } from 'hardhat-deploy/types'
 import getContract from './utils/getContract'
 
 const contractName = 'BonsaiOFT'
+const EndpointV2_BASE_SEPOLIA = '0x6EDCE65403992e310A62460808c4b910D972f10f'
 
 const TOKENS_PER_NFT = 100_000
 
@@ -11,7 +12,7 @@ const TOKENS_PER_NFT = 100_000
 const URI = 'ipfs://bafybeiba7hsqirohcgqibxokpml7eoh65z7fagah7ed7ggejud265ro2ky/'
 
 const deploy: DeployFunction = async (hre) => {
-    const { getNamedAccounts, deployments, ethers } = hre
+    const { getNamedAccounts, deployments, ethers, network } = hre
 
     const { deploy } = deployments
     const { deployer } = await getNamedAccounts()
@@ -38,7 +39,17 @@ const deploy: DeployFunction = async (hre) => {
     //     eid: EndpointId.AVALANCHE_V2_TESTNET
     //   }
     // }
-    const endpointV2Deployment = await hre.deployments.get('EndpointV2')
+    let endpointV2
+    try {
+        const endpointV2Deployment = await hre.deployments.get('EndpointV2')
+        endpointV2 = endpointV2Deployment.address
+    } catch (error) {
+        if (network.name === "base-sepolia") {
+            endpointV2 = EndpointV2_BASE_SEPOLIA
+        } else {
+            throw error
+        }
+    }
 
     // If the oftAdapter configuration is defined on a network that is deploying an OFT,
     // the deployment will log a warning and skip the deployment
@@ -51,7 +62,7 @@ const deploy: DeployFunction = async (hre) => {
         from: deployer,
         args: [
             TOKENS_PER_NFT,
-            endpointV2Deployment.address, // LayerZero's EndpointV2 address
+            endpointV2, // LayerZero's EndpointV2 address
             deployer, // owner
         ],
         log: true,
