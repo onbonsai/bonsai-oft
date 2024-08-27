@@ -31,3 +31,4 @@ remappings = [
 
 [rpc_endpoints]
 zksync-sepolia="https://sepolia.era.zksync.dev"
+amoy-testnet="https://polygon-amoy-bor-rpc.publicnode.com"

@@ -41,7 +41,6 @@ To deploy to zksync, use `foundry create`
 `zksync-testnet`
 ```bash
 pnpm compile:forge:zksync
-forge script script/testnet/Deploy.s.sol:DeployBonsaiOFT --rpc-url zksync-sepolia -vvvv
 forge create contracts/BonsaiOFT.sol:BonsaiOFT --account myKeystore --rpc-url zksync-sepolia --chain 300 --zksync --constructor-args 100000 "0xe2Ef622A13e71D9Dd2BBd12cd4b27e1516FA8a09" "0x21af1185734d213d45c6236146fb81e2b0e8b821"
 ```
 
@@ -50,4 +49,15 @@ Manually save the deployed contract address in `addresses.json`
 And send the `setBaseURI` tx
 ```bash
 cast send 0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82 "setBaseURI(string)" "ipfs://bafybeiba7hsqirohcgqibxokpml7eoh65z7fagah7ed7ggejud265ro2ky/" --account myKeystore --rpc-url zksync-sepolia --chain 300
+```
+
+### Wire the mesh
+We need to set the peers on all contracts, and set `enforcedOptions` for the Stargate listing requirement. Everything is configured in `*.layerzero.config.ts`
+```bash
+yarn wire:testnet
+```
+
+### Bridge from polygon to zksync/base
+```bash
+forge script script/testnet/Bridge.s.sol:LzSendPolygon --rpc-url amoy-testnet -vvvv
 ```

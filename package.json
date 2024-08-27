@@ -15,7 +15,8 @@
     "lint:sol": "solhint 'contracts/**/*.sol'",
     "test": "$npm_execpath run test:forge && $npm_execpath run test:hardhat",
     "test:forge": "forge test",
-    "test:hardhat": "hardhat test"
+    "test:hardhat": "hardhat test",
+    "wire:testnet": "hardhat lz:oapp:wire --oapp-config testnet.layerzero.config.ts"
   },
   "resolutions": {
     "ethers": "^5.7.2",
@@ -24,7 +25,7 @@
   "devDependencies": {
     "@babel/core": "^7.23.9",
     "@layerzerolabs/eslint-config-next": "~2.3.34",
-    "@layerzerolabs/lz-definitions": "^2.3.34",
+    "@layerzerolabs/lz-definitions": "^2.3.38",
     "@layerzerolabs/lz-evm-messagelib-v2": "^2.3.34",
     "@layerzerolabs/lz-evm-protocol-v2": "^2.3.34",
     "@layerzerolabs/lz-evm-v1-0.7": "^2.3.34",

@@ -59,12 +59,12 @@ const config: HardhatUserConfig = {
     },
     networks: {
         'base-sepolia': {
-            eid: EndpointId.BASE_V2_TESTNET,
+            eid: EndpointId.BASESEP_V2_TESTNET,
             url: process.env.RPC_URL_BASE_SEPOLIA || 'https://sepolia.base.org',
             accounts,
         },
         'zksync-sepolia': {
-            eid: EndpointId.ZKSYNC_V2_TESTNET,
+            eid: EndpointId.ZKSYNCSEP_V2_TESTNET,
             url: process.env.RPC_URL_ZKSYNC_TESTNET || 'https://sepolia.era.zksync.dev',
             accounts,
         },
