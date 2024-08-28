@@ -23,7 +23,7 @@ contract LzSendPolygon is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         address owner = vm.addr(deployerPrivateKey);
-        uint256 tokensToSend = 100 ether;
+        uint256 tokensToSend = 10_000 ether;
 
         IERC20 bonsai = IERC20(BONSAI_TOKEN);
         BonsaiOFTAdapter adapter = BonsaiOFTAdapter(BONSAI_OFT_ADAPTER);
@@ -33,7 +33,7 @@ contract LzSendPolygon is Script {
 
         // prep the send
         SendParam memory sendParam = SendParam(
-            BASESEP_V2_TESTNET,
+            ZKSYNCSEP_V2_TESTNET,
             addressToBytes32(owner),
             tokensToSend,
             tokensToSend,

@@ -61,3 +61,13 @@ yarn wire:testnet
 ```bash
 forge script script/testnet/Bridge.s.sol:LzSendPolygon --rpc-url amoy-testnet -vvvv
 ```
+
+### Read from BonsaiOFT on base
+```bash
+forge script script/testnet/Read.s.sol:Read --rpc-url base-sepolia -vvvv
+```
+
+### Read from BonsaiOFT on zksync
+```bash
+zksync-cli contract read --chain "zksync-sepolia" --contract "0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82" --method "mirror()" --output "address"
+```
