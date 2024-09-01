@@ -38,7 +38,7 @@ const enforcedOptions: any[] = [
     {
         msgType: 1, // depending on OAppOptionType3
         optionType: ExecutorOptionType.LZ_RECEIVE,
-        gas: 65000, // gas limit in wei for EndpointV2.lzReceive
+        gas: 65_000, // gas limit in wei for EndpointV2.lzReceive
         value: 0, // msg.value in wei for EndpointV2.lzReceive
     }
 ]
