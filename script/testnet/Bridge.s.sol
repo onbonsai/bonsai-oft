@@ -21,10 +21,19 @@ contract LzSendPolygon is Script {
     function run() public {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_HEX");
         vm.startBroadcast(deployerPrivateKey);
-
         address owner = vm.addr(deployerPrivateKey);
-        uint256 tokensToSend = 100_000 ether;
 
+        // _send(50 ether, owner);
+        // _send(100 ether, owner);
+        // _send(1_000 ether, owner);
+        // _send(10_000 ether, owner);
+        _send(100_000 ether, owner);
+        // _send(200_000 ether, owner);
+
+        vm.stopBroadcast();
+    }
+
+    function _send(uint256 tokensToSend, address to) internal {
         IERC20 bonsai = IERC20(BONSAI_TOKEN);
         BonsaiOFTAdapter adapter = BonsaiOFTAdapter(BONSAI_OFT_ADAPTER);
 
@@ -34,7 +43,7 @@ contract LzSendPolygon is Script {
         // prep the send
         SendParam memory sendParam = SendParam(
             ZKSYNCSEP_V2_TESTNET,
-            addressToBytes32(owner),
+            _addressToBytes32(to),
             tokensToSend,
             tokensToSend,
             "", // extraOptions
@@ -47,11 +56,9 @@ contract LzSendPolygon is Script {
 
         // send
         adapter.send{ value: fee.nativeFee }(sendParam, fee, payable(address(this)));
-
-        vm.stopBroadcast();
     }
 
-    function addressToBytes32(address _addr) internal pure returns (bytes32) {
+    function _addressToBytes32(address _addr) internal pure returns (bytes32) {
         return bytes32(uint256(uint160(_addr)));
     }
 }

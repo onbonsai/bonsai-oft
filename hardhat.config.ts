@@ -9,6 +9,7 @@ import 'hardhat-deploy'
 import 'hardhat-contract-sizer'
 import '@nomiclabs/hardhat-ethers'
 import '@nomicfoundation/hardhat-foundry'
+import '@nomicfoundation/hardhat-verify';
 import '@layerzerolabs/toolbox-hardhat'
 import { HardhatUserConfig, HttpNetworkAccountsUserConfig } from 'hardhat/types'
 
@@ -82,6 +83,11 @@ const config: HardhatUserConfig = {
             default: 0, // wallet address of index[0], of the mnemonic in .env
         },
     },
+    etherscan: {
+        apiKey: {
+            baseSepolia: process.env.ETHERSCAN_API_KEY!,
+        }
+    }
 }
 
 export default config

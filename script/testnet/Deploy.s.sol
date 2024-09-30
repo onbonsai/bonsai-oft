@@ -26,3 +26,26 @@ contract DeployBonsaiOFT is Script {
         vm.stopBroadcast();
     }
 }
+
+// @dev this script is used to the deploy BonsaiOFT.sol to zksync sepolia testnet
+contract SetPeer is Script {
+    address BONSAI_OFT = 0x3d2bD0e15829AA5C362a4144FdF4A1112fa29B5c;
+    address BONSAI_OFT_ADAPTER = 0x9918889E93e8c4357a2D4bCE0965dcC493FFFDA8;
+    address ZORA_CREATOR = 0x482107B5966178b595758069E80D7DD7F1652622;
+    uint32 remoteEid = 40267; // amoy
+
+    function setUp() public {}
+
+    function run() public {
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_HEX");
+        vm.startBroadcast(deployerPrivateKey);
+
+        BonsaiOFT(payable(BONSAI_OFT)).setPeer(remoteEid, _addressToBytes32(address(BONSAI_OFT_ADAPTER)));
+
+        vm.stopBroadcast();
+    }
+
+    function _addressToBytes32(address _addr) internal pure returns (bytes32) {
+        return bytes32(uint256(uint160(_addr)));
+    }
+}
