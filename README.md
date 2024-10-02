@@ -21,6 +21,11 @@ We're going to deploy
 
 All scripts set the base uri to the current NFT uri; No initial supply is set for BonsaiOFT contracts on Base/zkSync
 
+## Build the contracts
+```bash
+pnpm compile
+```
+
 ### Deploy `BonsaiOFTAdapter` to Polygon
 Toggle only the polygon network with [SPACE] and set the tag as `BonsaiOFTAdapter`
 ```bash
@@ -38,44 +43,48 @@ Read: https://docs.zksync.io/build/tooling/foundry/getting-started#deploying-sma
 
 To deploy to zksync, use `foundry create`
 
-`zksync-testnet`
 ```bash
 pnpm compile:forge:zksync
-forge create contracts/BonsaiOFT.sol:BonsaiOFT --account myKeystore --rpc-url zksync-sepolia --chain 300 --zksync --constructor-args 100000 "0xe2Ef622A13e71D9Dd2BBd12cd4b27e1516FA8a09" "0x21af1185734d213d45c6236146fb81e2b0e8b821" --verify
+forge create contracts/BonsaiOFT.sol:BonsaiOFT --account myKeystore --rpc-url zksync --chain 324 --zksync --constructor-args 100000 "0xd07C30aF3Ff30D96BDc9c6044958230Eb797DDBF" "0x21aF1185734D213D45C6236146fb81E2b0E8b821" --verify
 ```
 
 Manually save the deployed contract address in `addresses.json`
 
 And send the `setBaseURI` tx
 ```bash
-cast send 0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82 "setBaseURI(string)" "ipfs://bafybeiba7hsqirohcgqibxokpml7eoh65z7fagah7ed7ggejud265ro2ky/" --account myKeystore --rpc-url zksync-sepolia --chain 300
+cast send 0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82 "setBaseURI(string)" "ipfs://bafybeiba7hsqirohcgqibxokpml7eoh65z7fagah7ed7ggejud265ro2ky/" --account myKeystore --rpc-url zksync --chain 324
 ```
 
 ### Wire the mesh
 We need to set the peers on all contracts, and set `enforcedOptions` for the Stargate listing requirement. Everything is configured in `*.layerzero.config.ts`
 ```bash
-yarn wire:testnet
+yarn wire
 ```
 
 ### Bridge from polygon to zksync/base
-then, check the tx on layerzeroscan: https://testnet.layerzeroscan.com
+then, check the tx on layerzeroscan: https://layerzeroscan.com
 ```bash
-forge script script/testnet/Bridge.s.sol:LzSendPolygon --rpc-url amoy-testnet -vvvv
+forge script script/mainnet/Bridge.s.sol:LzSendPolygon --rpc-url polygon -vvvv --broadcast
 ```
 
 ### Read from BonsaiOFT on base
 ```bash
-forge script script/testnet/Read.s.sol:Read --rpc-url base-sepolia -vvvv
+forge script script/mainnet/Read.s.sol:Read --rpc-url base -vvvv
 ```
 
 ### Read from BonsaiOFT on zksync
 ```bash
-zksync-cli contract read --chain "zksync-sepolia" --contract "0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82" --method "mirror()" --output "address"
+zksync-cli contract read --chain "zksync" --contract "0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82" --method "mirror()" --output "address"
+```
+
+### Verify BonsaiOFTAdapter on polygon
+```bash
+npx hardhat verify --network polygon --constructor-args ./utils/verify/bonsaiOFTAdapter.ts 0x303b63e785B656ca56ea5A5C1634Ab20C98895e1
 ```
 
 ### Verify BonsaiOFT on base
 ```bash
-npx hardhat verify --network base-sepolia --constructor-args ./utils/verify/bonsaiOFT.ts 0x3d2bD0e15829AA5C362a4144FdF4A1112fa29B5c
+npx hardhat verify --network base --constructor-args ./utils/verify/bonsaiOFT.ts 0x474f4cb764df9da079D94052fED39625c147C12C
 ```
 
 ### [TODO] Verify BonsaiOFT on zksync (etherscan)

@@ -41,6 +41,12 @@ const deploy: DeployFunction = async (hre) => {
         return
     }
 
+    console.log([
+        hre.network.config.oftAdapter.tokenAddress, // token address
+        endpointV2Deployment.address, // LayerZero's EndpointV2 address
+        deployer, // owner
+    ]);
+
     const { address } = await deploy(contractName, {
         from: deployer,
         args: [

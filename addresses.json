@@ -9,5 +9,16 @@
     "zksync-sepolia": {
       "BonsaiOFT": "0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82"
     }
+  },
+  "MAINNET": {
+    "polygon": {
+      "BonsaiOFTAdapter": "0x303b63e785B656ca56ea5A5C1634Ab20C98895e1"
+    },
+    "base": {
+      "BonsaiOFT": "0x474f4cb764df9da079D94052fED39625c147C12C"
+    },
+    "zksync": {
+      "BonsaiOFT": "0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82"
+    }
   }
 }

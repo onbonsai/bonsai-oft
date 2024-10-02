@@ -51,6 +51,8 @@ const deploy: DeployFunction = async (hre) => {
         }
     }
 
+    console.log(`endpointV2: ${endpointV2}`);
+
     // If the oftAdapter configuration is defined on a network that is deploying an OFT,
     // the deployment will log a warning and skip the deployment
     if (hre.network.config.oftAdapter != null) {

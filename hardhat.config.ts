@@ -59,6 +59,24 @@ const config: HardhatUserConfig = {
         ],
     },
     networks: {
+        base: {
+            eid: EndpointId.BASE_V2_MAINNET,
+            url: process.env.RPC_URL_BASE_MAINNET || 'https://mainnet.base.org',
+            accounts,
+        },
+        polygon: {
+            eid: EndpointId.POLYGON_V2_MAINNET,
+            url: process.env.RPC_URL_POLYGON_MAINNET || 'https://rpc.ankr.com/polygon',
+            accounts,
+            oftAdapter: {
+                tokenAddress: BONSAI_TOKEN_ADDRESS,
+            },
+        },
+        zksync: {
+            eid: EndpointId.ZKSYNC_V2_MAINNET,
+            url: process.env.RPC_URL_ZKSYNC_MAINNET || 'https://mainnet.era.zksync.io',
+            accounts,
+        },
         'base-sepolia': {
             eid: EndpointId.BASESEP_V2_TESTNET,
             url: process.env.RPC_URL_BASE_SEPOLIA || 'https://sepolia.base.org',
@@ -86,6 +104,8 @@ const config: HardhatUserConfig = {
     etherscan: {
         apiKey: {
             baseSepolia: process.env.ETHERSCAN_API_KEY!,
+            polygon: process.env.POL_ETHERSCAN_API_KEY!,
+            base: process.env.BASE_ETHERSCAN_API_KEY!,
         }
     }
 }
