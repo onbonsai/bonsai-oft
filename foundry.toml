@@ -33,9 +33,10 @@ remappings = [
 zksync-sepolia="https://sepolia.era.zksync.dev"
 amoy-testnet="https://polygon-amoy-bor-rpc.publicnode.com"
 base-sepolia="https://sepolia.base.org"
-polygon="https://rpc.ankr.com/polygon"
+polygon="${POL_RPC_URL}"
 base="https://mainnet.base.org"
 zksync="https://mainnet.era.zksync.io"
+lens = "https://rpc.lens.dev"
 
 [etherscan]
 zksyncTestnet = { key = "${ZK_ETHERSCAN_API_KEY}", url = "https://api-sepolia-era.zksync.network/api", chain = 300 }

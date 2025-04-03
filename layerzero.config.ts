@@ -60,8 +60,32 @@ const config: OAppOmniGraphHardhat = {
             from: baseContract,
             to: zksyncContract,
             config: {
-                enforcedOptions
-            }
+                enforcedOptions,
+                sendConfig: {
+                    executorConfig: {
+                        maxMessageSize: 10000,
+                        executor: "0x2CCA08ae69E0C44b18a57Ab2A87644234dAebaE4",
+                    },
+                    ulnConfig: {
+                        confirmations: BigInt(42),
+                        requiredDVNs: ["0x9e059a54699a285714207b43b055483e78faac25"], // LayerZero Labs
+                        optionalDVNs: [
+                            "0xcdf31d62140204c08853b547e64707110fbc6680", // Stargate
+                        ],
+                        optionalDVNThreshold: 1,
+                    }
+                },
+                receiveConfig: {
+                    ulnConfig: {
+                        confirmations: BigInt(42),
+                        requiredDVNs: ["0x9e059a54699a285714207b43b055483e78faac25"], // LayerZero Labs
+                        optionalDVNs: [
+                            "0xcdf31d62140204c08853b547e64707110fbc6680", // Stargate
+                        ],
+                        optionalDVNThreshold: 1,
+                    },
+                },
+            },
         },
         {
             from: baseContract,
@@ -74,7 +98,31 @@ const config: OAppOmniGraphHardhat = {
             from: zksyncContract,
             to: baseContract,
             config: {
-                enforcedOptions
+                enforcedOptions,
+                sendConfig: {
+                    executorConfig: {
+                        maxMessageSize: 10000,
+                        executor: "0x664e390e672A811c12091db8426cBb7d68D5D8A6",
+                    },
+                    ulnConfig: {
+                        confirmations: BigInt(42),
+                        requiredDVNs: ["0x620a9df73d2f1015ea75aea1067227f9013f5c51"], // LayerZero Labs
+                        optionalDVNs: [
+                            "0x62aa89bad332788021f6f4f4fb196d5fe59c27a6", // Stargate
+                        ],
+                        optionalDVNThreshold: 1,
+                    }
+                },
+                receiveConfig: {
+                    ulnConfig: {
+                        confirmations: BigInt(42),
+                        requiredDVNs: ["0x620a9df73d2f1015ea75aea1067227f9013f5c51"], // LayerZero Labs
+                        optionalDVNs: [
+                            "0x62aa89bad332788021f6f4f4fb196d5fe59c27a6", // Stargate
+                        ],
+                        optionalDVNThreshold: 1,
+                    },
+                },
             }
         },
         {

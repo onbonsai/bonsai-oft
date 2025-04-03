@@ -57,6 +57,8 @@ cast send 0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82 "setBaseURI(string)" "ipfs:
 
 ### Wire the mesh
 We need to set the peers on all contracts, and set `enforcedOptions` for the Stargate listing requirement. Everything is configured in `*.layerzero.config.ts`
+https://docs.layerzero.network/v2/developers/evm/technical-reference/dvn-addresses
+https://docs.layerzero.network/v2/developers/evm/technical-reference/deployed-contracts
 ```bash
 yarn wire
 ```
@@ -65,6 +67,18 @@ yarn wire
 then, check the tx on layerzeroscan: https://layerzeroscan.com
 ```bash
 forge script script/mainnet/Bridge.s.sol:LzSendPolygon --rpc-url polygon -vvvv --broadcast
+```
+
+### Bridge from base to zksync
+then, check the tx on layerzeroscan: https://layerzeroscan.com
+```bash
+forge script script/mainnet/Bridge.s.sol:LzSendBase --rpc-url base -vvvv --broadcast
+```
+
+### Bridge from zksync to base
+then, check the tx on layerzeroscan: https://layerzeroscan.com
+```bash
+forge script script/mainnet/Bridge.s.sol:LzSendZkSync --rpc-url zksync -vvvv --broadcast
 ```
 
 ### Read from BonsaiOFT on base
@@ -90,5 +104,5 @@ npx hardhat verify --network base --constructor-args ./utils/verify/bonsaiOFT.ts
 ### [TODO] Verify BonsaiOFT on zksync (etherscan)
 `Fail - Unable to verify. Compiled contract runtime bytecode does NOT match the on-chain runtime bytecode.`
 ```
-forge verify-contract 0xe86B6e5381C2641c2dfA247628481f1dEd18DCC7 contracts/BonsaiOFT.sol:BonsaiOFT --chain-id 300 --watch --zksync --constructor-args $(cast abi-encode "constructor(uint96,address,address)" 100000 "0xe2Ef622A13e71D9Dd2BBd12cd4b27e1516FA8a09" "0x21af1185734d213d45c6236146fb81e2b0e8b821")
+forge verify-contract 0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82 contracts/BonsaiOFT.sol:BonsaiOFT --chain-id 324 --watch --zksync --constructor-args $(cast abi-encode "constructor(uint96,address,address)" 100000 "0xd07C30aF3Ff30D96BDc9c6044958230Eb797DDBF" "0x21af1185734d213d45c6236146fb81e2b0e8b821")
 ```
