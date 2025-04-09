@@ -10,7 +10,7 @@ import {OptionsBuilder} from "@layerzerolabs/oapp-evm/contracts/oapp/libs/Option
 import {BonsaiOFT} from "../../contracts/BonsaiOFT.sol";
 import {BonsaiOFTAdapter} from "../../contracts/BonsaiOFTAdapter.sol";
 
-// @dev this script allows the deployer to bridge bonsai tokens from polygon to zksync/base
+// @dev this script allows the deployer to bridge bonsai tokens from polygon to zksync/base/lens
 contract LzSendPolygon is Script {
     using OptionsBuilder for bytes;
 
@@ -18,6 +18,7 @@ contract LzSendPolygon is Script {
     address BONSAI_TOKEN = 0x3d2bD0e15829AA5C362a4144FdF4A1112fa29B5c;
     uint32 ZKSYNC_V2_MAINNET = 30165;
     uint32 BASE_V2_MAINNET = 30184;
+    uint32 LENS_V2_MAINNET = 30373;
 
     function setUp() public {}
 
@@ -26,13 +27,11 @@ contract LzSendPolygon is Script {
         vm.startBroadcast(deployerPrivateKey);
         address owner = vm.addr(deployerPrivateKey);
 
-        // sending 8mil
+        // sending 1mil
         uint256 rewards = 500_000 ether;
         // for (uint256 i = 0; i < 2; i++) {
             _send(rewards, owner);
             _send(rewards, owner);
-            _send(rewards, owner);
-            _send(200_000 ether, owner);
         // }
 
         vm.stopBroadcast();
@@ -47,7 +46,7 @@ contract LzSendPolygon is Script {
 
         // prep the send
         SendParam memory sendParam = SendParam(
-            BASE_V2_MAINNET,
+            LENS_V2_MAINNET,
             _addressToBytes32(to),
             tokensToSend,
             tokensToSend,
@@ -166,6 +165,32 @@ contract LzSendZkSync is Script {
 
         // send
         adapter.send{ value: fee.nativeFee }(sendParam, fee, payable(address(this)));
+    }
+
+    function _addressToBytes32(address _addr) internal pure returns (bytes32) {
+        return bytes32(uint256(uint160(_addr)));
+    }
+}
+
+// @dev this script allows the deployer to set the peer on the polygon adapter
+contract SetPeer is Script {
+    using OptionsBuilder for bytes;
+
+    address BONSAI_OFT_ADAPTER = 0x303b63e785B656ca56ea5A5C1634Ab20C98895e1;
+    address BONSAI_OFT_LENS = 0xB0588f9A9cADe7CD5f194a5fe77AcD6A58250f82;
+    uint32 LENS_V2_MAINNET = 30373;
+
+    function setUp() public {}
+
+    function run() public {
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_HEX");
+        vm.startBroadcast(deployerPrivateKey);
+
+        BonsaiOFTAdapter adapter = BonsaiOFTAdapter(BONSAI_OFT_ADAPTER);
+
+        adapter.setPeer(LENS_V2_MAINNET, _addressToBytes32(address(BONSAI_OFT_LENS)));
+
+        vm.stopBroadcast();
     }
 
     function _addressToBytes32(address _addr) internal pure returns (bytes32) {

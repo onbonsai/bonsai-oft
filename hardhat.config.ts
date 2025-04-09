@@ -66,7 +66,7 @@ const config: HardhatUserConfig = {
         },
         polygon: {
             eid: EndpointId.POLYGON_V2_MAINNET,
-            url: process.env.RPC_URL_POLYGON_MAINNET || 'https://rpc.ankr.com/polygon',
+            url: "https://polygon-mainnet.g.alchemy.com/v2/vf3yLieDOGqQGDgzIq_PzGbJinRt6VHc",
             accounts,
             oftAdapter: {
                 tokenAddress: BONSAI_TOKEN_ADDRESS,
@@ -75,6 +75,11 @@ const config: HardhatUserConfig = {
         zksync: {
             eid: EndpointId.ZKSYNC_V2_MAINNET,
             url: process.env.RPC_URL_ZKSYNC_MAINNET || 'https://mainnet.era.zksync.io',
+            accounts,
+        },
+        lens: {
+            eid: EndpointId.LENS_V2_MAINNET,
+            url: 'https://rpc.lens.dev',
             accounts,
         },
         'base-sepolia': {

@@ -63,7 +63,7 @@ https://docs.layerzero.network/v2/developers/evm/technical-reference/deployed-co
 yarn wire
 ```
 
-### Bridge from polygon to zksync/base
+### Bridge from polygon to zksync/base/lens
 then, check the tx on layerzeroscan: https://layerzeroscan.com
 ```bash
 forge script script/mainnet/Bridge.s.sol:LzSendPolygon --rpc-url polygon -vvvv --broadcast

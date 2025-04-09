@@ -42,3 +42,4 @@ lens = "https://rpc.lens.dev"
 zksyncTestnet = { key = "${ZK_ETHERSCAN_API_KEY}", url = "https://api-sepolia-era.zksync.network/api", chain = 300 }
 zksync = { key = "${ZK_ETHERSCAN_API_KEY}", url = "https://api-era.zksync.network/api", chain = 324 }
 polygon = { key = "${POL_ETHERSCAN_API_KEY}", url = "https://api.polygonscan.com/api", chain = 137 }
+lens = { key = "${ZK_ETHERSCAN_API_KEY}", url = "https://api-explorer-verify.lens.matterhosted.dev/contract_verification", chain = 232 }

@@ -1,7 +1,8 @@
 import { EndpointId } from '@layerzerolabs/lz-definitions'
 import { ExecutorOptionType } from '@layerzerolabs/lz-v2-utilities'
+import { TwoWayConfig, generateConnectionsConfig } from '@layerzerolabs/metadata-tools'
 
-import type { OAppOmniGraphHardhat, OmniPointHardhat } from '@layerzerolabs/toolbox-hardhat'
+import type { OAppOmniGraphHardhat, OmniPointHardhat, OAppEnforcedOption } from '@layerzerolabs/toolbox-hardhat'
 
 /**
  *  WARNING: ONLY 1 OFTAdapter should exist for a given global mesh.
@@ -33,168 +34,84 @@ const polygonContract: OmniPointHardhat = {
     contractName: 'BonsaiOFTAdapter',
 }
 
+const lensContract: OmniPointHardhat = {
+    eid: EndpointId.LENS_V2_MAINNET,
+    contractName: 'BonsaiOFT',
+}
+
 // requirement for listing on stargate
-const enforcedOptions: any[] = [
+const enforcedOptions: OAppEnforcedOption[] = [
     {
         msgType: 1, // depending on OAppOptionType3
         optionType: ExecutorOptionType.LZ_RECEIVE,
         gas: 110_000, // gas limit in wei for EndpointV2.lzReceive
         value: 0, // msg.value in wei for EndpointV2.lzReceive
-    }
+    },
 ]
 
-const config: OAppOmniGraphHardhat = {
-    contracts: [
-        {
-            contract: baseContract,
-        },
-        {
-            contract: zksyncContract,
-        },
-        {
-            contract: polygonContract,
-        },
+const pathways: TwoWayConfig[] = [
+    [
+        baseContract,
+        zksyncContract,
+        [['LayerZero Labs'], []], // [ requiredDVN[], [ optionalDVN[], threshold ] ]
+        [1, 1], // [A to B confirmations, B to A confirmations]
+        [enforcedOptions, enforcedOptions], // Chain B enforcedOptions, Chain A enforcedOptions
     ],
-    connections: [
-        {
-            from: baseContract,
-            to: zksyncContract,
-            config: {
-                enforcedOptions,
-                sendConfig: {
-                    executorConfig: {
-                        maxMessageSize: 10000,
-                        executor: "0x2CCA08ae69E0C44b18a57Ab2A87644234dAebaE4",
-                    },
-                    ulnConfig: {
-                        confirmations: BigInt(42),
-                        requiredDVNs: ["0x9e059a54699a285714207b43b055483e78faac25"], // LayerZero Labs
-                        optionalDVNs: [
-                            "0xcdf31d62140204c08853b547e64707110fbc6680", // Stargate
-                        ],
-                        optionalDVNThreshold: 1,
-                    }
-                },
-                receiveConfig: {
-                    ulnConfig: {
-                        confirmations: BigInt(42),
-                        requiredDVNs: ["0x9e059a54699a285714207b43b055483e78faac25"], // LayerZero Labs
-                        optionalDVNs: [
-                            "0xcdf31d62140204c08853b547e64707110fbc6680", // Stargate
-                        ],
-                        optionalDVNThreshold: 1,
-                    },
-                },
-            },
-        },
-        {
-            from: baseContract,
-            to: polygonContract,
-            config: {
-                enforcedOptions
-            }
-        },
-        {
-            from: zksyncContract,
-            to: baseContract,
-            config: {
-                enforcedOptions,
-                sendConfig: {
-                    executorConfig: {
-                        maxMessageSize: 10000,
-                        executor: "0x664e390e672A811c12091db8426cBb7d68D5D8A6",
-                    },
-                    ulnConfig: {
-                        confirmations: BigInt(42),
-                        requiredDVNs: ["0x620a9df73d2f1015ea75aea1067227f9013f5c51"], // LayerZero Labs
-                        optionalDVNs: [
-                            "0x62aa89bad332788021f6f4f4fb196d5fe59c27a6", // Stargate
-                        ],
-                        optionalDVNThreshold: 1,
-                    }
-                },
-                receiveConfig: {
-                    ulnConfig: {
-                        confirmations: BigInt(42),
-                        requiredDVNs: ["0x620a9df73d2f1015ea75aea1067227f9013f5c51"], // LayerZero Labs
-                        optionalDVNs: [
-                            "0x62aa89bad332788021f6f4f4fb196d5fe59c27a6", // Stargate
-                        ],
-                        optionalDVNThreshold: 1,
-                    },
-                },
-            }
-        },
-        {
-            from: zksyncContract,
-            to: polygonContract,
-            config: {
-                enforcedOptions,
-                sendConfig: {
-                    executorConfig: {
-                        maxMessageSize: 10000,
-                        executor: "0x664e390e672A811c12091db8426cBb7d68D5D8A6",
-                    },
-                    ulnConfig: {
-                        confirmations: BigInt(42),
-                        requiredDVNs: ["0x620a9df73d2f1015ea75aea1067227f9013f5c51"], // LayerZero Labs
-                        optionalDVNs: [
-                            "0x62aa89bad332788021f6f4f4fb196d5fe59c27a6", // Stargate
-                        ],
-                        optionalDVNThreshold: 1,
-                    }
-                },
-                receiveConfig: {
-                    ulnConfig: {
-                        confirmations: BigInt(42),
-                        requiredDVNs: ["0x620a9df73d2f1015ea75aea1067227f9013f5c51"], // LayerZero Labs
-                        optionalDVNs: [
-                            "0x62aa89bad332788021f6f4f4fb196d5fe59c27a6", // Stargate
-                        ],
-                        optionalDVNThreshold: 1,
-                    }
-                },
-            }
-        },
-        {
-            from: polygonContract,
-            to: zksyncContract,
-            config: {
-                enforcedOptions,
-                sendConfig: {
-                    executorConfig: {
-                        maxMessageSize: 10000,
-                        executor: "0xCd3F213AD101472e1713C72B1697E727C803885b",
-                    },
-                    ulnConfig: {
-                        confirmations: BigInt(42),
-                        requiredDVNs: ["0x23de2fe932d9043291f870324b74f820e11dc81a"], // LayerZero Labs
-                        optionalDVNs: [
-                            "0xc79f0b1bcb7cdae9f9ba547dcfc57cbfcd2993a5", // Stargate
-                        ],
-                        optionalDVNThreshold: 1,
-                    }
-                },
-                receiveConfig: {
-                    ulnConfig: {
-                        confirmations: BigInt(42),
-                        requiredDVNs: ["0x23de2fe932d9043291f870324b74f820e11dc81a"], // LayerZero Labs
-                        optionalDVNs: [
-                            "0xc79f0b1bcb7cdae9f9ba547dcfc57cbfcd2993a5", // Stargate
-                        ],
-                        optionalDVNThreshold: 1,
-                    }
-                },
-            }
-        },
-        {
-            from: polygonContract,
-            to: baseContract,
-            config: {
-                enforcedOptions
-            }
-        },
+    [
+        baseContract,
+        polygonContract,
+        [['LayerZero Labs'], []], // [ requiredDVN[], [ optionalDVN[], threshold ] ]
+        [1, 1],
+        [enforcedOptions, enforcedOptions],
     ],
-}
+    [
+        baseContract,
+        lensContract,
+        [['LayerZero Labs'], []],
+        [1, 1],
+        [enforcedOptions, enforcedOptions],
+    ],
+    [
+        zksyncContract,
+        polygonContract,
+        [['LayerZero Labs'], []],
+        [1, 1],
+        [enforcedOptions, enforcedOptions],
+    ],
+    [
+        zksyncContract,
+        lensContract,
+        [['LayerZero Labs'], []],
+        [1, 1],
+        [enforcedOptions, enforcedOptions],
+    ],
+    [
+        polygonContract,
+        lensContract,
+        [['LayerZero Labs'], []],
+        [1, 1],
+        [enforcedOptions, enforcedOptions],
+    ],
+]
 
-export default config
+export default async function () {
+    // Generate the connections config based on the pathways
+    const connections = await generateConnectionsConfig(pathways)
+    return {
+        contracts: [
+            {
+                contract: baseContract,
+            },
+            {
+                contract: zksyncContract,
+            },
+            {
+                contract: polygonContract,
+            },
+            {
+                contract: lensContract,
+            },
+        ],
+        connections,
+    }
+}
